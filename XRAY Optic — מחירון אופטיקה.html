@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XRAY Optic — מחירון אופטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f4f0;--card:#fff;--border:#e2e0d8;--border-strong:#c8c5bb;--text:#1a1916;--text-muted:#6b6860;--text-hint:#a09d96;--blue:#1a4f8a;--blue-light:#e8f0fa;--blue-mid:#2d6bbf;--green:#1e6644;--green-light:#e6f4ec;--amber:#7a4a00;--amber-light:#fdf0d8;--red:#8a1f1f;--radius:10px;--radius-sm:6px;--radius-pill:20px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:620px;margin:0 auto}
+header{margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.logo{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--text-hint);text-transform:uppercase;margin-bottom:6px}
+h1{font-size:22px;font-weight:700;line-height:1.2}
+h1 span{color:var(--blue-mid)}
+.subtitle{font-size:13px;color:var(--text-muted);margin-top:4px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:12px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-hint);margin-bottom:10px}
+.toggle-row{display:flex;flex-wrap:wrap;gap:8px}
+.tog{font-size:13px;padding:7px 14px;border:1px solid var(--border-strong);border-radius:var(--radius-pill);cursor:pointer;background:var(--bg);color:var(--text-muted);transition:all .15s;user-select:none;font-family:'Heebo',sans-serif}
+.tog:hover{background:var(--blue-light);border-color:var(--blue-mid);color:var(--blue)}
+.tog.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:500}
+.calc-btn{width:100%;padding:13px;font-size:15px;font-weight:700;font-family:'Heebo',sans-serif;border:none;border-radius:var(--radius);background:var(--blue);color:#fff;cursor:pointer;margin-top:4px}
+.calc-btn:hover{background:var(--blue-mid)}
+.divider{border:none;border-top:1px solid var(--border);margin:4px 0 12px}
+#result{margin-top:1.5rem}
+.res-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:10px;animation:si .2s ease}
+@keyframes si{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-pill);margin-bottom:10px}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.res-name{font-size:21px;font-weight:700;margin-bottom:10px}
+.price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.price-main{font-size:30px;font-weight:700;color:var(--blue)}
+.price-strike{font-size:15px;color:var(--text-hint);text-decoration:line-through}
+.price-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-pill)}
+.pill-noexam{background:var(--amber-light);color:var(--amber)}
+.pill-exam{background:var(--green-light);color:var(--green)}
+.exam-sub{font-size:12px;color:var(--text-muted);margin-bottom:14px}
+.why-box{font-size:13px;color:var(--text-muted);line-height:1.7;padding-top:12px;border-top:1px solid var(--border)}
+.opts-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-hint);margin:12px 0 4px}
+.opt-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--border)}
+.opt-name{font-size:13px}
+.opt-tag{font-size:11px;padding:2px 8px;border-radius:var(--radius-pill);background:var(--bg);color:var(--text-muted);border:1px solid var(--border);white-space:nowrap}
+.opt-price{font-size:13px;font-weight:700;white-space:nowrap}
+.note-box{background:#fffbf0;border:1px solid #f0d88a;border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--amber);line-height:1.7;margin-top:8px}
+.err{font-size:13px;color:var(--red);padding:12px 0}
+.reset-btn{display:block;width:100%;margin-top:8px;padding:10px;font-size:13px;font-family:'Heebo',sans-serif;font-weight:500;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--bg);color:var(--text-muted);cursor:pointer;text-align:center}
+footer{margin-top:3rem;text-align:center;font-size:11px;color:var(--text-hint)}
+select{font-family:'Heebo',sans-serif;width:100%;padding:6px 2px;font-size:13px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);text-align:center}
+th,td{vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <p class="logo">XRAY Optic</p>
+    <h1>מחירון <span>אופטיקה</span></h1>
+    <p class="subtitle">הזן את פרטי הלקוח וקבל המלצה מיידית עם מחיר</p>
+  </header>
+
+  <div class="card">
+    <p class="section-label">סוג משקפיים</p>
+    <div class="toggle-row" id="lensType">
+      <span class="tog" data-v="vision">ראייה רגיל</span>
+      <span class="tog" data-v="sun">שמש</span>
+      <span class="tog" data-v="transitions">טרנזישיין</span>
+      <span class="tog" data-v="office">אופיס</span>
+      <span class="tog" data-v="multi">מולטיפוקל</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">מרשם</p>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr>
+          <th style="text-align:left;padding:6px 8px;color:var(--text-hint);font-weight:500;border-bottom:1px solid var(--border);width:50px"></th>
+          <th style="text-align:center;padding:6px 8px;color:var(--text-hint);font-weight:500;border-bottom:1px solid var(--border)">PD</th>
+          <th style="text-align:center;padding:6px 8px;color:var(--text-hint);font-weight:500;border-bottom:1px solid var(--border)">ADD</th>
+          <th style="text-align:center;padding:6px 8px;color:var(--text-hint);font-weight:500;border-bottom:1px solid var(--border)">AXIS</th>
+          <th style="text-align:center;padding:6px 8px;color:var(--text-hint);font-weight:500;border-bottom:1px solid var(--border)">CYL</th>
+          <th style="text-align:center;padding:6px 8px;color:var(--text-hint);font-weight:500;border-bottom:1px solid var(--border)">SPH</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px;font-weight:500;color:var(--text-muted);font-size:12px">Right</td>
+            <td style="padding:4px"><select id="od_pd"></select></td>
+            <td style="padding:4px"><select id="od_add"></select></td>
+            <td style="padding:4px"><select id="od_axis"></select></td>
+            <td style="padding:4px"><select id="od_cyl"></select></td>
+            <td style="padding:4px"><select id="od_sph"></select></td>
+          </tr>
+          <tr>
+            <td style="padding:8px;font-weight:500;color:var(--text-muted);font-size:12px">Left</td>
+            <td style="padding:4px"><select id="os_pd"></select></td>
+            <td style="padding:4px"><select id="os_add"></select></td>
+            <td style="padding:4px"><select id="os_axis"></select></td>
+            <td style="padding:4px"><select id="os_cyl"></select></td>
+            <td style="padding:4px"><select id="os_sph"></select></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">סוג מסגרת</p>
+    <div class="toggle-row" id="frameType">
+      <span class="tog on" data-v="regular">רגילה (ללא תוספת)</span>
+      <span class="tog" data-v="nylon">ניילון (+50 ₪)</span>
+      <span class="tog" data-v="screws">ברגים (+150 ₪)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">העדפת לקוח (אופציונלי)</p>
+    <div class="toggle-row" id="pref">
+      <span class="tog" data-v="thin">דק / אסתטי</span>
+      <span class="tog" data-v="quality">איכות מקסימלית</span>
+      <span class="tog" data-v="price">מחיר נמוך</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">פרמטרים נוספים</p>
+    <div class="toggle-row" id="extras">
+      <span class="tog" data-v="bluelight">בלו לייט</span>
+      <span class="tog" data-v="zeiss">לקוח Zeiss קודם</span>
+      <span class="tog" data-v="exam">בדיקה אצלנו</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <button class="calc-btn" onclick="calculate()">חשב המלצה</button>
+  <div id="result"></div>
+  <footer>XRAY Optic — כלי פנימי לעובדים בלבד</footer>
+</div>
+
+<script>
+function togGroup(id,multi){
+  document.querySelectorAll('#'+id+' .tog').forEach(t=>{
+    t.onclick=()=>{
+      if(!multi){document.querySelectorAll('#'+id+' .tog').forEach(x=>x.classList.remove('on'));}
+      multi?t.classList.toggle('on'):t.classList.add('on');
+    };
+  });
+}
+togGroup('lensType',false);togGroup('frameType',false);togGroup('pref',false);togGroup('extras',true);
+function gv(id){const o=document.querySelector('#'+id+' .tog.on');return o?o.dataset.v:null;}
+function gvs(id){return Array.from(document.querySelectorAll('#'+id+' .tog.on')).map(t=>t.dataset.v);}
+function fmt(n){return Math.round(n).toLocaleString('he-IL')+' ₪';}
+
+function fillSel(id,opts,def){
+  const s=document.getElementById(id);
+  s.innerHTML='';
+  opts.forEach(v=>{
+    const o=document.createElement('option');
+    o.value=String(v);o.textContent=String(v);
+    if(typeof v==='number'&&v>0){o.style.color='#1a4f8a';o.style.fontWeight='500';}
+    if(String(v)===String(def))o.selected=true;
+    s.appendChild(o);
+  });
+}
+
+function initDropdowns(){
+  const D='—';
+  const sph=[D];
+  for(let v=0;v>=-16;v-=0.25)sph.push(parseFloat(v.toFixed(2)));
+  for(let v=0.25;v<=10;v+=0.25)sph.push(parseFloat(v.toFixed(2)));
+  const cyl=[D];for(let v=0;v<=6;v+=0.25)cyl.push(parseFloat(v.toFixed(2)));
+  const axis=[D];for(let i=1;i<=180;i++)axis.push(i);
+  const add=[D];for(let v=0.75;v<=3.5;v+=0.25)add.push(parseFloat(v.toFixed(2)));
+  const pd=[D];for(let v=25;v<=40;v+=0.5)pd.push(parseFloat(v.toFixed(1)));
+  ['od','os'].forEach(e=>{
+    fillSel(e+'_sph',sph,D);fillSel(e+'_cyl',cyl,D);
+    fillSel(e+'_axis',axis,D);fillSel(e+'_add',add,D);fillSel(e+'_pd',pd,D);
+  });
+}
+initDropdowns();
+
+function rs(id){const v=document.getElementById(id).value;if(v==='—'||v==='')return null;const n=parseFloat(v);return isNaN(n)?null:n;}
+function rc(id){const v=document.getElementById(id).value;if(v==='—'||v==='')return 0;const n=parseFloat(v);return isNaN(n)?0:n;}
+function fa(f){return f==='nylon'?50:f==='screws'?150:0;}
+function fl(f){return f==='nylon'?'מסגרת ניילון (+50 ₪)':f==='screws'?'מסגרת ברגים (+150 ₪)':null;}
+
+function pb(base,fAdd,exam){
+  const full=base+fAdd,disc=full-100;
+  if(exam)return`<div class="price-row"><span class="price-main">${fmt(full)}</span><span class="price-pill pill-exam">כולל בדיקת ראייה</span></div><p class="exam-sub">לקוח ללא בדיקה: ${fmt(disc)} (הנחה 100 ₪)</p>`;
+  return`<div class="price-row"><span class="price-main">${fmt(disc)}</span><span class="price-strike">${fmt(full)}</span><span class="price-pill pill-noexam">ללא בדיקה</span></div><p class="exam-sub">מחיר כולל בדיקה: ${fmt(full)} — מומלץ לעשות אצלנו</p>`;
+}
+
+function gi(c){if(c<=2)return'1.56';if(c<=3.5)return'1.61';if(c<=5)return'1.67';if(c<=9)return'1.74';return'1.76';}
+
+function calculate(){
+  const out=document.getElementById('result');
+  const lt=gv('lensType'),pref=gv('pref'),ft=gv('frameType')||'regular',ex=gvs('extras');
+  const od_s=rs('od_sph'),od_c=rc('od_cyl'),os_s=rs('os_sph'),os_c=rc('os_cyl');
+  const od_a=rs('od_add'),os_a=rs('os_add'),hasAdd=od_a!==null||os_a!==null;
+  const bl=ex.includes('bluelight'),zeiss=ex.includes('zeiss'),exam=ex.includes('exam');
+  const BL=bl?100:0,fAdd=fa(ft),fLbl=fl(ft);
+
+  if(!lt){out.innerHTML='<p class="err">יש לבחור סוג משקפיים.</p>';return;}
+  if(od_s===null&&os_s===null){out.innerHTML='<p class="err">יש למלא SPH לפחות בעין אחת.</p>';return;}
+
+  const odc=od_s!==null?Math.abs(od_s)+od_c:0;
+  const osc=os_s!==null?Math.abs(os_s)+os_c:0;
+  const combo=Math.max(odc,osc);
+  const dSph=odc>=osc?(od_s||0):(os_s||0);
+  const dCyl=odc>=osc?od_c:os_c;
+  const abS=Math.abs(dSph),isMinus=dSph<0;
+  const hCyl=dCyl>2,vhCyl=dCyl>4;
+  const ai=gi(combo);
+  const iP={'1.56':500,'1.61':600,'1.67':900,'1.74':isMinus?1100:1500,'1.76':2200};
+  const vP={'1.56':1500,'1.61':1900,'1.67':2200,'1.74':2600,'1.76':2200};
+
+  const odT=od_s!==null?`Right: SPH ${od_s>0?'+':''}${od_s} / CYL ${od_c}`:'';
+  const osT=os_s!==null?`Left: SPH ${os_s>0?'+':''}${os_s} / CYL ${os_c}`:'';
+  const rxL=[odT,osT].filter(Boolean).join(' | ');
+
+  let main=null,opts=[],notes=[],why='';
+
+  if(hasAdd&&lt==='vision')notes.push('נמצא ADD במרשם — שקול להציע מולטיפוקל או אופיס!');
+
+  if(lt==='vision'){
+    if(ai==='1.76'&&!zeiss){
+      main={name:'Vision Single Tokai 1.76',badge:'badge-blue',badgeLabel:'Tokai בלבד',price:2200+BL};
+      why=`צירוף ${combo.toFixed(2)} — מעל 9.25, חייב 1.76 דרך Tokai בלבד.`;
+    }else if(zeiss){
+      const p=combo<=5?3000:combo<=7?4200:combo<=9?4800:5600;
+      main={name:'Tokai Sereno SPS',badge:'badge-blue',badgeLabel:'פרימיום יפני',price:p+BL};
+      why='לקוח Zeiss — Tokai Sereno שומרת על רמת ההסתגלות.';
+    }else if(vhCyl){
+      const idx=ai==='1.56'?'1.61':ai;
+      const bp={'1.61':1300,'1.67':1500,'1.74':1800,'1.76':2200};
+      main={name:`ייצור AR ${idx}`,badge:'badge-amber',badgeLabel:'ייצור — חובה',price:(bp[idx]||1800)+BL};
+      why='צילינדר מעל 4 — חובה ייצור.';
+    }else if(pref==='quality'){
+      const lp=ai==='1.67'?1600:ai==='1.61'?1300:ai==='1.74'?1800:900;
+      main={name:`Tokai Lutina SPS ${ai}`,badge:'badge-blue',badgeLabel:'פרימיום יפני',price:lp+BL};
+      opts=[
+        {name:`Tokai Sereno ${ai}`,tag:'הכי טוב',price:fmt((combo<=5?3000:combo<=7?4200:combo<=9?4800:5600)+BL)},
+        {name:`VRX Premium AR ${ai}`,tag:'גרמני',price:fmt((vP[ai]||2600)+BL)},
+      ];
+      why=`צירוף ${combo.toFixed(2)} — אינדקס ${ai}. Tokai Lutina יפנית.`;
+    }else if(pref==='thin'){
+      const p=(hCyl?iP[ai]+100:iP[ai])+BL;
+      main={name:`AR ${ai} מדף`,badge:'badge-green',badgeLabel:'מומלץ לדקות',price:p};
+      opts=[
+        {name:`VRX Premium AR ${ai}`,tag:'גרמני — דק ואיכותי',price:fmt((vP[ai]||2600)+BL)},
+        {name:'Vision Single Tokai 1.76',tag:'הדקה בעולם',price:fmt(2200+BL)},
+      ];
+      why=`צירוף ${combo.toFixed(2)} — אינדקס ${ai} לדקות מרביות.`;
+    }else if(pref==='price'){
+      const p=(hCyl?iP[ai]+100:iP[ai])+BL;
+      main={name:`AR ${ai} מדף`,badge:'badge-amber',badgeLabel:'חסכוני',price:p};
+      why=`צירוף ${combo.toFixed(2)} — אינדקס ${ai}.`;
+      if(hCyl)notes.push('צילינדר מעל 2 — תוספת 100 ₪.');
+    }else{
+      const p=(hCyl?iP[ai]+100:iP[ai])+BL;
+      main={name:`AR ${ai} מדף`,badge:'badge-green',badgeLabel:'מומלץ',price:p};
+      opts=[
+        {name:`VRX Premium AR ${ai}`,tag:'גרמני',price:fmt((vP[ai]||2600)+BL)},
+        {name:`Tokai Lutina ${ai}`,tag:'יפני פרימיום',price:fmt((ai==='1.67'?1600:ai==='1.74'?1800:1300)+BL)},
+      ];
+      why=`צירוף ${combo.toFixed(2)} — אינדקס ${ai} מדף, יחס מחיר-ביצוע מיטבי.`;
+    }
+
+  }else if(lt==='sun'){
+    const fixP=vhCyl||abS>4;
+    if(fixP){
+      main={name:'שמש ייצור 1.67 AR דו-צדדי',badge:'badge-amber',badgeLabel:'ייצור',price:1600};
+      opts=[{name:'שמש ייצור 1.6 פולוראיד',tag:'איכות',price:fmt(1650+fAdd)},{name:'שמש ייצור 1.67 פולוראיד',tag:'הכי טוב',price:fmt(2000+fAdd)}];
+      why='מספר/צילינדר גבוה — ייצור שמש. אספקה 14 ימי עסקים.';
+      notes.push('ייצור שמש — מחיר קבוע, הנחת בדיקה לא חלה.');
+    }else if(pref==='quality'){
+      main={name:'שמש 1.67 AR פנימי',badge:'badge-blue',badgeLabel:'פרימיום',price:1300};
+      opts=[{name:'שמש ייצור 1.67 פולוראיד',tag:'הכי טוב',price:fmt(2000+fAdd)},{name:'שמש 1.6 ציפוי מראה',tag:'אסתטי',price:fmt((hCyl?1200:1000)+fAdd)}];
+      why='שמש 1.67 AR פנימי — אפור/חום/ירוק.';
+    }else if(pref==='price'){
+      main={name:'שמש 1.5 אפור/חום/ירוק',badge:'badge-amber',badgeLabel:'חסכוני',price:500};
+      why='תקציב מוגבל — 1.5 בסיסי.';
+    }else{
+      main={name:'שמש 1.6 AR פנימי',badge:'badge-green',badgeLabel:'מומלץ',price:hCyl?1050:800};
+      opts=[{name:'שמש 1.67 AR פנימי',tag:'דק יותר',price:fmt(hCyl?1500:1300)},{name:'שמש 1.5 פולוראיד',tag:'פולוראיד',price:fmt(1000)}];
+      why='1.6 AR פנימי — אפור/חום/ירוק. הבחירה הסטנדרטית.';
+    }
+
+  }else if(lt==='transitions'){
+    if(zeiss){
+      const idx=combo>6?'1.67':combo>4?'1.6':'1.5';
+      main={name:`Tokai Wide Transitions ${idx}`,badge:'badge-blue',badgeLabel:'פרימיום יפני',price:combo>6?7200:combo>4?6000:4600};
+      why='לקוח Zeiss — Tokai Wide Transitions.';
+    }else if(hCyl){
+      const idx=combo>6?'1.67':'1.6';
+      main={name:`PHOTO ${idx} מתכהה`,badge:'badge-amber',badgeLabel:'פוטוכרומי',price:combo>6?1700:1100};
+      why='צילינדר מעל 2 — סדרת PHOTO. טרנזישיין דור 9 עד צילינדר 2 בלבד.';
+    }else{
+      const idx=combo>6?'1.67':combo>4?'1.6':'1.56';
+      const bp={'1.56':1300,'1.6':1700,'1.67':2000};
+      main={name:`טרנזישיין דור 9 ${idx}`,badge:'badge-green',badgeLabel:'מומלץ',price:bp[idx]};
+      opts=[{name:`PHOTO ${idx} מתכהה`,tag:'חלופה זולה',price:fmt(idx==='1.67'?1700:idx==='1.6'?1100:800)}];
+      why=`טרנזישיין דור 9 ${idx}. אפור/חום/ירוק, עד צילינדר 2.`;
+    }
+
+  }else if(lt==='office'){
+    const idx=combo>5?'1.67':combo>3?'1.6':combo>0?'1.5':'1.5';
+    const bp={'1.5':1100,'1.6':1400,'1.67':1600,'1.74':1900};
+    const BLO=bl?200:0;
+    main={name:`Eye Light Pro אופיס AR ${idx}`,badge:'badge-green',badgeLabel:'אופיס',price:bp[idx]+BLO};
+    opts=[{name:'Honey Comb 1.6',tag:'נהיגה לילית',price:fmt(1000+fAdd)}];
+    why=`אופיס לטווח קרוב-בינוני. אינדקס ${idx}, צירוף ${combo.toFixed(2)}.`;
+    if(bl)notes.push('בלו לייט לאופיס — תוספת 200 ₪ (לא 100 ₪ כרגיל).');
+
+  }else if(lt==='multi'){
+    if(zeiss||pref==='quality'){
+      const idx=combo>5?'1.67':combo>3?'1.6':'1.5';
+      const bp={'1.5':3000,'1.6':4200,'1.67':4800};
+      main={name:`Tokai Sereno מולטיפוקל ${idx}`,badge:'badge-blue',badgeLabel:'פרימיום יפני',price:bp[idx]+BL};
+      opts=[{name:`Tokai Wide ${idx}`,tag:'רמה 2',price:fmt(combo>3?2700:2400)},{name:`VRX Premium ${idx}`,tag:'גרמני',price:fmt((combo>5?2200:combo>3?1900:1500)+BL)}];
+      why=zeiss?'לקוח Zeiss — Sereno מקבילה לאיכות Zeiss Progressive.':'איכות מקסימלית — Tokai Sereno.';
+    }else if(pref==='price'){
+      const idx=combo>5?'1.67':combo>3?'1.6':'1.5';
+      const bp={'1.5':1500,'1.6':1900,'1.67':2200};
+      main={name:`VRX Premium מולטיפוקל ${idx}`,badge:'badge-amber',badgeLabel:'גרמני — חסכוני',price:bp[idx]+BL};
+      why=`מולטיפוקל גרמני בתקציב סביר. צירוף ${combo.toFixed(2)} — אינדקס ${idx}.`;
+    }else{
+      const idx=combo>5?'1.67':combo>3?'1.6':'1.5';
+      const bp={'1.5':1500,'1.6':1900,'1.67':2200};
+      main={name:`VRX Premium מולטיפוקל AR ${idx}`,badge:'badge-green',badgeLabel:'גרמני — מומלץ',price:bp[idx]+BL};
+      opts=[{name:`Tokai Wide ${idx}`,tag:'שדרוג',price:fmt(combo>3?2700:2400)},{name:`Tokai Sereno ${idx}`,tag:'פרימיום',price:fmt(combo>5?4800:combo>3?4200:3000)}];
+      why=`VRX גרמני — צירוף ${combo.toFixed(2)}, אינדקס ${idx}.`;
+    }
+    if(!exam)notes.push('החזר כספי ל-2 חודשי הסתגלות — תקף רק אם הלקוח עשה בדיקה אצלנו!');
+  }
+
+  if(!main){out.innerHTML=`<p class="err">לא נמצאה המלצה (${lt}, צירוף ${combo.toFixed(2)}).</p>`;return;}
+
+  const fixSun=lt==='sun'&&(vhCyl||abS>4);
+  const pH=fixSun?`<div class="price-row"><span class="price-main">${fmt(main.price+fAdd)}</span></div><p class="exam-sub">מחיר קבוע — ייצור שמש</p>`:pb(main.price,fAdd,exam);
+  const fH=fLbl?`<div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;padding:6px 10px;background:var(--bg);border-radius:var(--radius-sm)">מסגרת: <strong>${fLbl}</strong></div>`:'';
+  const rH=rxL?`<div style="font-size:12px;color:var(--text-hint);margin-bottom:10px">${rxL}</div>`:'';
+  const oH=opts.length?`<div style="margin-top:10px"><p class="opts-label">אפשרויות נוספות</p>${opts.map(o=>`<div class="opt-row"><span class="opt-name">${o.name}</span><span class="opt-tag">${o.tag}</span><span class="opt-price">${o.price}</span></div>`).join('')}</div>`:'';
+  const nH=notes.length?`<div class="note-box">${notes.map(n=>`<div>&#9432; ${n}</div>`).join('')}</div>`:'';
+
+  out.innerHTML=`<div class="res-card">${rH}<span class="badge ${main.badge}">${main.badgeLabel}</span><p class="res-name">${main.name}</p>${pH}${fH}<div class="why-box">${why}${oH}</div></div>${nH}<button class="reset-btn" onclick="resetForm()">נקה והתחל מחדש</button>`;
+  out.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function resetForm(){
+  document.querySelectorAll('.tog').forEach(t=>t.classList.remove('on'));
+  document.querySelector('#frameType .tog[data-v="regular"]').classList.add('on');
+  document.getElementById('result').innerHTML='';
+  initDropdowns();
+}
+</script>
+</body>
+</html>

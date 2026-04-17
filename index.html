@@ -478,53 +478,63 @@ function calculate() {
   const isMinus = sphere < 0;
   const highCyl = cylRaw > 2;
   const veryHighCyl = cylRaw > 4;
+  const combo = absSphere + cylRaw;
+
+  function getIdx(combo) {
+    if (combo <= 2) return '1.56';
+    if (combo <= 3.5) return '1.61';
+    if (combo <= 5) return '1.67';
+    if (combo <= 9) return '1.74';
+    return '1.76';
+  }
+
+  const autoIdx = getIdx(combo);
+  const idxPrices = {'1.56':500,'1.61':600,'1.67':900,'1.74':isMinus?1100:1500,'1.76':2200};
+  const vrxPrices = {'1.56':1500,'1.61':1900,'1.67':2200,'1.74':2600,'1.76':2200};
 
   let main = null, options = [], notes = [], why = '';
 
   if (lensType === 'vision') {
-    if (zeiss) {
-      const p = absSphere<=4?3000:absSphere<=6?4200:absSphere<=8?4800:5600;
+    if (autoIdx === '1.76' && !zeiss && pref !== 'quality') {
+      main = {name:'Vision Single Tokai 1.76', badge:'badge-blue', badgeLabel:'Tokai בלבד — צירוף גבוה', price:2200+BL};
+      why = `צירוף ${combo} — מעל 9.25, חייב אינדקס 1.76. זמין דרך Tokai בלבד.`;
+    } else if (zeiss) {
+      const p = combo<=5?3000:combo<=7?4200:combo<=9?4800:5600;
       main = {name:'Tokai Sereno SPS', badge:'badge-blue', badgeLabel:'פרימיום יפני', price:p+BL};
-      why = 'לקוח שבא עם Zeiss — חייבים Tokai Sereno כדי לשמור על רמת ההסתגלות שהלקוח מכיר. ירידה לכל מוצר אחר תגרום לתסכול.';
+      why = 'לקוח שבא עם Zeiss — חייבים Tokai Sereno כדי לשמור על רמת ההסתגלות שהלקוח מכיר.';
     } else if (veryHighCyl) {
-      const idx = absSphere>8?'1.74':absSphere>6?'1.67':'1.61';
-      const bp = {'1.61':1300,'1.67':1500,'1.74':1800};
-      main = {name:`ייצור AR ${idx}`, badge:'badge-amber', badgeLabel:'ייצור — חובה', price:bp[idx]+BL};
+      const idx = autoIdx==='1.56'?'1.61':autoIdx;
+      const bp = {'1.61':1300,'1.67':1500,'1.74':1800,'1.76':2200};
+      main = {name:`ייצור AR ${idx}`, badge:'badge-amber', badgeLabel:'ייצור — חובה', price:(bp[idx]||1800)+BL};
       why = 'צילינדר מעל 4 — חובה ייצור ללא הגבלת צילינדר/פריזמה.';
     } else if (pref === 'quality') {
-      const idx = absSphere>6?'1.67':absSphere>4?'1.61':'1.56';
-      main = {name:`Tokai Lutina SPS ${idx}`, badge:'badge-blue', badgeLabel:'פרימיום יפני', price:(idx==='1.67'?1600:idx==='1.61'?1300:900)+BL};
+      main = {name:`Tokai Lutina SPS ${autoIdx}`, badge:'badge-blue', badgeLabel:'פרימיום יפני', price:(autoIdx==='1.67'?1600:autoIdx==='1.61'?1300:autoIdx==='1.74'?1800:900)+BL};
       options = [
-        {name:'Tokai Sereno 1.67', tag:'הכי טוב', price:fmt(4800+BL)},
-        {name:`VRX Premium AR ${idx}`, tag:'גרמני', price:fmt((idx==='1.67'?2200:idx==='1.61'?1900:1500)+BL)},
+        {name:`Tokai Sereno ${autoIdx}`, tag:'הכי טוב', price:fmt((combo<=5?3000:combo<=7?4200:combo<=9?4800:5600)+BL)},
+        {name:`VRX Premium AR ${autoIdx}`, tag:'גרמני', price:fmt((vrxPrices[autoIdx]||2600)+BL)},
       ];
-      why = 'העדפת איכות מקסימלית — Tokai Lutina יפנית עם ציפוי SPS מתקדם.';
+      why = `צירוף ${combo} — אינדקס ${autoIdx}. העדפת איכות מקסימלית — Tokai Lutina יפנית.`;
     } else if (pref === 'thin') {
-      const idx = absSphere>8?'1.74':absSphere>6?'1.67':absSphere>4?'1.61':'1.56';
-      const bp = {'1.56':500,'1.61':600,'1.67':900,'1.74':isMinus?1100:1500};
-      const p = (highCyl?bp[idx]+100:bp[idx])+BL;
-      main = {name:`AR ${idx} מדף`, badge:'badge-green', badgeLabel:'מומלץ לדקות', price:p};
+      const p = (highCyl?idxPrices[autoIdx]+100:idxPrices[autoIdx])+BL;
+      main = {name:`AR ${autoIdx} מדף`, badge:'badge-green', badgeLabel:'מומלץ לדקות', price:p};
       options = [
-        {name:`VRX Premium AR ${idx}`, tag:'גרמני — דק ואיכותי', price:fmt((idx==='1.74'?2600:idx==='1.67'?2200:idx==='1.61'?1900:1500)+BL)},
+        {name:`VRX Premium AR ${autoIdx}`, tag:'גרמני — דק ואיכותי', price:fmt((vrxPrices[autoIdx]||2600)+BL)},
         {name:'Vision Single Tokai 1.76', tag:'הדקה בעולם', price:fmt(2200+BL)},
       ];
-      why = `ספרה ${sphere} — אינדקס ${idx} לדקות מרביות. ככל שהאינדקס גבוה יותר, העדשה דקה ואסתטית יותר.`;
+      why = `צירוף ${combo} (ספרה ${sphere} + צילינדר ${cylRaw}) — אינדקס ${autoIdx} לדקות מרביות.`;
     } else if (pref === 'price') {
-      const idx = absSphere>6?'1.61':'1.56';
-      const bp = {'1.56':500,'1.61':600};
-      main = {name:`AR ${idx} מדף`, badge:'badge-amber', badgeLabel:'חסכוני', price:bp[idx]+BL+(highCyl?100:0)};
-      why = 'העדפת מחיר — AR מדף, ציפוי איכותי בסיסי.';
+      const p = (highCyl?idxPrices[autoIdx]+100:idxPrices[autoIdx])+BL;
+      main = {name:`AR ${autoIdx} מדף`, badge:'badge-amber', badgeLabel:'חסכוני', price:p};
+      why = `צירוף ${combo} — אינדקס ${autoIdx}. מחיר בסיסי עם ציפוי AR.`;
       if (highCyl) notes.push('צילינדר מעל 2 — תוספת 100 ₪ אוטומטית.');
     } else {
-      const idx = absSphere>8?'1.74':absSphere>6?'1.67':absSphere>4?'1.61':'1.56';
-      const bp = {'1.56':500,'1.61':600,'1.67':900,'1.74':isMinus?1100:1500};
-      const p = (highCyl?bp[idx]+100:bp[idx])+BL;
-      main = {name:`AR ${idx} מדף`, badge:'badge-green', badgeLabel:'מומלץ', price:p};
+      const p = (highCyl?idxPrices[autoIdx]+100:idxPrices[autoIdx])+BL;
+      main = {name:`AR ${autoIdx} מדף`, badge:'badge-green', badgeLabel:'מומלץ', price:p};
       options = [
-        {name:`VRX Premium AR ${idx}`, tag:'גרמני', price:fmt((idx==='1.74'?2600:idx==='1.67'?2200:idx==='1.61'?1900:1500)+BL)},
-        {name:`Tokai Lutina ${idx}`, tag:'יפני פרימיום', price:fmt((idx==='1.67'?1600:1300)+BL)},
+        {name:`VRX Premium AR ${autoIdx}`, tag:'גרמני', price:fmt((vrxPrices[autoIdx]||2600)+BL)},
+        {name:`Tokai Lutina ${autoIdx}`, tag:'יפני פרימיום', price:fmt((autoIdx==='1.67'?1600:autoIdx==='1.74'?1800:1300)+BL)},
       ];
-      why = `ספרה ${sphere}, צילינדר ${cylRaw} — AR ${idx} מדף, יחס מחיר-ביצוע מיטבי.`;
+      why = `צירוף ${combo} (ספרה ${sphere} + צילינדר ${cylRaw}) — אינדקס ${autoIdx} מדף, יחס מחיר-ביצוע מיטבי.`;
     }
 
   } else if (lensType === 'sun') {
